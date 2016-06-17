@@ -3,6 +3,8 @@ package br.com.api.study.angularjs.rest.impl;
 import br.com.api.study.angularjs.model.Carrier;
 import br.com.api.study.angularjs.model.Contact;
 import br.com.api.study.angularjs.rest.ContactsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,10 @@ import java.util.List;
 @RequestMapping(value = "/contact")
 public class ContactServiceImpl implements ContactsService {
 
+    private static final Logger log = LoggerFactory.getLogger(ContactServiceImpl.class);
+
+    public static List<Contact> contacts = initializeContacts();
+
     @RequestMapping(value = "/all",
             method = RequestMethod.GET,
             produces = {"application/json"})
@@ -21,6 +27,24 @@ public class ContactServiceImpl implements ContactsService {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Contact> findAll() {
+        log.info("Find all contacts.");
+        return contacts;
+    }
+
+    @RequestMapping(value = "/add",
+            method = RequestMethod.POST,
+            consumes = {"application/json"})
+    @CrossOrigin(origins = "*")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void add(@RequestBody Contact contact) {
+        contact.setDate(new Date());
+        contacts.add(contact);
+        log.info("Add contact. {}", contact);
+    }
+
+    public static List<Contact> initializeContacts() {
+        contacts = new ArrayList<Contact>();
+
         Carrier claro = new Carrier("Claro", 36, Carrier.CarrierCategory.CELL);
         Carrier vivo = new Carrier("Vivo", 15, Carrier.CarrierCategory.CELL);
         Carrier tim = new Carrier("Tim", 41, Carrier.CarrierCategory.CELL);
@@ -30,7 +54,6 @@ public class ContactServiceImpl implements ContactsService {
         Contact contactTwo = new Contact("Bruna Nichele Da Rosa", "51 8104-9781", new Date(), claro);
         Contact contactThree = new Contact("Daniel S. Prusch", "51 8447-0884", new Date(), vivo);
 
-        List<Contact> contacts = new ArrayList<Contact>();
         contacts.add(contactOne);
         contacts.add(contactTwo);
         contacts.add(contactThree);
