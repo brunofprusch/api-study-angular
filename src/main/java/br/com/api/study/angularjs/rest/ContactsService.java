@@ -9,6 +9,6 @@ import java.util.List;
 public interface ContactsService {
 
     public List<Contact> findAll();
-    public void add(Contact contact);
+    public Contact add(Contact contact);
 
 }

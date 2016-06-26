@@ -9,6 +9,7 @@ import java.util.Date;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Contact {
 
+    private String serial;
     private String name;
     private String phone;
     private Date date;
@@ -16,7 +17,8 @@ public class Contact {
 
     public Contact(){}
 
-    public Contact(String name, String phone, Date date, Carrier carrier) {
+    public Contact(String serial, String name, String phone, Date date, Carrier carrier) {
+        this.setSerial(serial);
         this.setName(name);
         this.setPhone(phone);
         this.setDate(date);
@@ -55,36 +57,11 @@ public class Contact {
         this.carrier = carrier;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Contact contact = (Contact) o;
-
-        if (name != null ? !name.equals(contact.name) : contact.name != null) return false;
-        if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
-        if (date != null ? !date.equals(contact.date) : contact.date != null) return false;
-        return carrier != null ? carrier.equals(contact.carrier) : contact.carrier == null;
-
+    public String getSerial() {
+        return serial;
     }
 
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (carrier != null ? carrier.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", date=" + date +
-                ", carrier=" + carrier +
-                '}';
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 }
