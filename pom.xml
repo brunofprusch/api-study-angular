@@ -5,7 +5,7 @@
 
 	<groupId>br.com.api.study.angularjs</groupId>
 	<artifactId>api-study-angular</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>deploy</version>
 	<packaging>jar</packaging>
 
 	<name>api-study-angular</name>
