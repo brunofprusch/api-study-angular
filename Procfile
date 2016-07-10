@@ -1,1 +1,1 @@
-web: java -jar target/api-study-angular-deploy.jar
+web: java -Dserver.port=$PORT -jar target/api-study-angular-deploy.jar
