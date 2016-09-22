@@ -1,0 +1,8 @@
+br/com/api/study/angularjs/model/Contact.class
+br/com/api/study/angularjs/rest/impl/ContactServiceImpl.class
+br/com/api/study/angularjs/rest/CarrierService.class
+br/com/api/study/angularjs/model/Carrier$CarrierCategory.class
+br/com/api/study/angularjs/rest/ContactsService.class
+br/com/api/study/angularjs/ApiStudyAngularApplication.class
+br/com/api/study/angularjs/rest/impl/CarrierServiceImpl.class
+br/com/api/study/angularjs/model/Carrier.class

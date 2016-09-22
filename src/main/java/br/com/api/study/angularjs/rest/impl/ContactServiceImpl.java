@@ -44,6 +44,45 @@ public class ContactServiceImpl implements ContactsService {
         return contact;
     }
 
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/{serial}",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Contact findContact(@PathVariable String serial) {
+
+        for (Contact contact : contacts) {
+            if (contact.getSerial().equals(serial)) {
+                log.info("Found contact to serial. serial={}, {}", serial, contact);
+                return contact;
+            }
+        }
+
+        log.info("Not found contact to serial. serial={}", serial);
+        return null;
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/{serial}",
+            method = RequestMethod.DELETE,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Boolean deleteContact(@PathVariable String serial) {
+
+        for (Contact contact : contacts) {
+            if (contact.getSerial().equals(serial)) {
+                contacts.remove(contact);
+                log.info("Delete contact to serial. serial={}, {}", serial, contact);
+                return Boolean.TRUE;
+            }
+        }
+
+        log.info("Contact not deleted. Not found contact to serial. serial={}", serial);
+        return Boolean.FALSE;
+    }
+
     public static List<Contact> initializeContacts() {
         contacts = new ArrayList<Contact>();
 
