@@ -1,11 +1,9 @@
 package br.com.api.study.angularjs.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@Document(collection="carrier")
 public class Carrier {
 
     public enum CarrierCategory {
@@ -13,24 +11,27 @@ public class Carrier {
         FIXED
     }
 
+    @Id
+    private String id;
     private String name;
     private Integer code;
     private CarrierCategory category;
 
     public Carrier(){}
 
-    public Carrier(String name, Integer code, CarrierCategory category) {
+    public Carrier(String id, String name, Integer code, CarrierCategory category) {
+        this.setId(id);
         this.setName(name);
         this.setCode(code);
         this.setCategory(category);
     }
 
-    public Integer getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -39,6 +40,14 @@ public class Carrier {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public CarrierCategory getCategory() {
@@ -56,6 +65,7 @@ public class Carrier {
 
         Carrier carrier = (Carrier) o;
 
+        if (id != null ? !id.equals(carrier.id) : carrier.id != null) return false;
         if (name != null ? !name.equals(carrier.name) : carrier.name != null) return false;
         if (code != null ? !code.equals(carrier.code) : carrier.code != null) return false;
         return category == carrier.category;
@@ -64,7 +74,8 @@ public class Carrier {
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (code != null ? code.hashCode() : 0);
         result = 31 * result + (category != null ? category.hashCode() : 0);
         return result;
@@ -73,7 +84,8 @@ public class Carrier {
     @Override
     public String toString() {
         return "Carrier{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", code=" + code +
                 ", category=" + category +
                 '}';

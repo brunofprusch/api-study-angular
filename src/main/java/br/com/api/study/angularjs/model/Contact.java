@@ -1,15 +1,14 @@
 package br.com.api.study.angularjs.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@Document(collection="contact")
 public class Contact {
-
-    private String serial;
+    @Id
+    private String id;
     private String name;
     private String phone;
     private Date date;
@@ -17,12 +16,20 @@ public class Contact {
 
     public Contact(){}
 
-    public Contact(String serial, String name, String phone, Date date, Carrier carrier) {
-        this.setSerial(serial);
+    public Contact(String id, String name, String phone, Date date, Carrier carrier) {
+        this.setId(id);
         this.setName(name);
         this.setPhone(phone);
         this.setDate(date);
         this.setCarrier(carrier);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -33,20 +40,20 @@ public class Contact {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Carrier getCarrier() {
@@ -57,11 +64,39 @@ public class Contact {
         this.carrier = carrier;
     }
 
-    public String getSerial() {
-        return serial;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contact contact = (Contact) o;
+
+        if (id != null ? !id.equals(contact.id) : contact.id != null) return false;
+        if (name != null ? !name.equals(contact.name) : contact.name != null) return false;
+        if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
+        if (date != null ? !date.equals(contact.date) : contact.date != null) return false;
+        return carrier != null ? carrier.equals(contact.carrier) : contact.carrier == null;
+
     }
 
-    public void setSerial(String serial) {
-        this.serial = serial;
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (carrier != null ? carrier.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", date=" + date +
+                ", carrier=" + carrier +
+                '}';
     }
 }

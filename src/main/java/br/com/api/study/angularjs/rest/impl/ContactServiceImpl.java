@@ -1,14 +1,14 @@
 package br.com.api.study.angularjs.rest.impl;
 
-import br.com.api.study.angularjs.model.Carrier;
 import br.com.api.study.angularjs.model.Contact;
+import br.com.api.study.angularjs.repository.ContactRepository;
 import br.com.api.study.angularjs.rest.ContactsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +18,9 @@ public class ContactServiceImpl implements ContactsService {
 
     private static final Logger log = LoggerFactory.getLogger(ContactServiceImpl.class);
 
-    public static List<Contact> contacts = initializeContacts();
+    @Autowired
+    private ContactRepository contactRepository;
+
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value = "/all",
@@ -28,7 +30,7 @@ public class ContactServiceImpl implements ContactsService {
     @ResponseBody
     public List<Contact> findAll() {
         log.info("Find all contacts.");
-        return contacts;
+        return contactRepository.findAll();
     }
 
     @RequestMapping(value = "/add",
@@ -39,66 +41,34 @@ public class ContactServiceImpl implements ContactsService {
     @ResponseBody
     public Contact add(@RequestBody Contact contact) {
         contact.setDate(new Date());
-        contacts.add(contact);
+        contactRepository.save(contact);
         log.info("Add contact. {}", contact);
         return contact;
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/{serial}",
+    @RequestMapping(value = "/{id}",
             method = RequestMethod.GET,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Contact findContact(@PathVariable String serial) {
-
-        for (Contact contact : contacts) {
-            if (contact.getSerial().equals(serial)) {
-                log.info("Found contact to serial. serial={}, {}", serial, contact);
-                return contact;
-            }
-        }
-
-        log.info("Not found contact to serial. serial={}", serial);
-        return null;
+    public Contact findContact(@PathVariable String id) {
+        return contactRepository.findOne(id);
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/{serial}",
+    @RequestMapping(value = "/{id}",
             method = RequestMethod.DELETE,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Boolean deleteContact(@PathVariable String serial) {
-
-        for (Contact contact : contacts) {
-            if (contact.getSerial().equals(serial)) {
-                contacts.remove(contact);
-                log.info("Delete contact to serial. serial={}, {}", serial, contact);
-                return Boolean.TRUE;
-            }
-        }
-
-        log.info("Contact not deleted. Not found contact to serial. serial={}", serial);
-        return Boolean.FALSE;
+    public Boolean deleteContact(@PathVariable String id) {
+        Contact contact = contactRepository.findOne(id);
+        contactRepository.delete(id);
+        return Boolean.TRUE;
     }
 
-    public static List<Contact> initializeContacts() {
-        contacts = new ArrayList<Contact>();
-
-        Carrier claro = new Carrier("Claro", 36, Carrier.CarrierCategory.CELL);
-        Carrier vivo = new Carrier("Vivo", 15, Carrier.CarrierCategory.CELL);
-        Carrier tim = new Carrier("Tim", 41, Carrier.CarrierCategory.CELL);
-        Carrier oi = new Carrier("Oi", 14, Carrier.CarrierCategory.CELL);
-
-        Contact contactOne = new Contact("JFG7D", "Bruno Feldmann Prusch", "51 9414-7667", new Date(), claro);
-        Contact contactTwo = new Contact("LP76F", "Bruna Nichele Da Rosa", "51 8104-9781", new Date(), claro);
-        Contact contactThree = new Contact("FDR09", "Daniel S. Prusch", "51 8447-0884", new Date(), vivo);
-
-        contacts.add(contactOne);
-        contacts.add(contactTwo);
-        contacts.add(contactThree);
-
-        return contacts;
+    public void setContactRepository(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 }
