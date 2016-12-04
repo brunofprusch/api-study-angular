@@ -6,9 +6,13 @@ import br.com.api.study.angularjs.rest.ContactsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,17 +25,36 @@ public class ContactServiceImpl implements ContactsService {
     @Autowired
     private ContactRepository contactRepository;
 
-
     @CrossOrigin(origins = "*")
     @RequestMapping(value = "/all",
             method = RequestMethod.GET,
             produces = {"application/json"})
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public List<Contact> findAll() {
+    public ResponseEntity<List<Contact>> findAll() {
+
+        List<String> exposeHeaders = new ArrayList<String>();
+        exposeHeaders.add("New-Header");
+        exposeHeaders.add("Date");
+
+        /*
+        List<HttpMethod> exposeMethods = new ArrayList<HttpMethod>();
+        exposeMethods.add(HttpMethod.GET);
+        */
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("New-Header", "HelloMan");
+        header.setAccessControlAllowHeaders(exposeHeaders);
+        header.setAccessControlExposeHeaders(exposeHeaders);
+        //header.setAccessControlAllowMethods(exposeMethods);
+
+        Contact contactOne = new Contact("OIUBD", "Bruno Feldmann Prusch", "9414-7667", new Date(), null);
+        Contact contactTwo = new Contact("OIUBD", "Bruna Nichele Da Rosa", "8104-9781", new Date(), null);
+        List<Contact> contacts = new ArrayList<Contact>();
+        contacts.add(contactOne);
+        contacts.add(contactTwo);
+
         log.info("Find all contacts.");
-        return contactRepository.findAll();
-    }
+        return new ResponseEntity<List<Contact>>(contacts, header, HttpStatus.OK);
+    };
 
     @RequestMapping(value = "/add",
             method = RequestMethod.POST,
@@ -52,7 +75,8 @@ public class ContactServiceImpl implements ContactsService {
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Contact findContact(@PathVariable String id) {
+    public Contact findContact(@RequestHeader("headerTest") String header, @PathVariable String id) {
+        String vazio = "";
         return contactRepository.findOne(id);
     }
 
