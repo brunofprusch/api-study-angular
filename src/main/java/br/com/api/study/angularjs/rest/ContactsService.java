@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface ContactsService {
 
-    ResponseEntity<List<Contact>> findAll();
+    ResponseEntity<List<Contact>> findAllWithHeader();
+    List<Contact> findAll();
     Contact add(Contact contact);
     Contact findContact(String header, String id);
     Boolean deleteContact(String id);

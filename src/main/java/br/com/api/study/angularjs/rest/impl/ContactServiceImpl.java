@@ -26,10 +26,10 @@ public class ContactServiceImpl implements ContactsService {
     private ContactRepository contactRepository;
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/all",
+    @RequestMapping(value = "/allWithHeader",
             method = RequestMethod.GET,
             produces = {"application/json"})
-    public ResponseEntity<List<Contact>> findAll() {
+    public ResponseEntity<List<Contact>> findAllWithHeader() {
 
         List<String> exposeHeaders = new ArrayList<String>();
         exposeHeaders.add("New-Header");
@@ -54,7 +54,17 @@ public class ContactServiceImpl implements ContactsService {
 
         log.info("Find all contacts.");
         return new ResponseEntity<List<Contact>>(contacts, header, HttpStatus.OK);
-    };
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/all",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    public List<Contact> findAll() {
+        List<Contact> contacts = contactRepository.findAll();
+        log.info("All contacts. {}", contacts);
+        return contacts;
+    }
 
     @RequestMapping(value = "/add",
             method = RequestMethod.POST,
