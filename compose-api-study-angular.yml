@@ -1,0 +1,12 @@
+version: '2'
+services:
+  api:
+    image: api-study-angular
+    ports:
+      - "8080:8080"
+    links:
+      - my-mongo
+  my-mongo:
+    image: mongo
+    ports:
+      - "27017"
