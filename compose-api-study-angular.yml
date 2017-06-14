@@ -5,8 +5,8 @@ services:
     ports:
       - "8080:8080"
     links:
-      - my-mongo
-  my-mongo:
+      - mongo
+  mongo:
     image: mongo
     ports:
       - "27017"

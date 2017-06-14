@@ -7,4 +7,4 @@ WORKDIR /root
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "api-study-angular-deploy.jar"]
+CMD ["java", "-jar", "api-study-angular-deploy.jar", "--spring.config.location=classpath:/docker.properties"]
